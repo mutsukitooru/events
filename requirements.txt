@@ -1,0 +1,6 @@
+feedparser
+asyncpg
+aiohttp
+requests
+jinja2
+selenium

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News Template</title>
+    <link href="{{ css }}" rel="stylesheet">
+    <style>
+        :root {
+          --crunchyroll: rgb(232, 126, 21);
+          --crunchyrollBright: #FF9900;
+          --discord: #2C2F33;
+          --discordDark: #23272A;
+          --cardbg: #23272A;
+        }
+        code {
+          font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+            monospace;
+        }
+        .border-crunchy {
+          border-color: var(--crunchyroll);
+        }
+
+        .text-crunchy {
+          color: var(--crunchyrollBright);
+        }
+    </style>
+</head>
+<body>
+    <div id="rendered" class="bg-gray-900 m-8" style="width: 700px;">
+        <div class="flex flex-col p-5">
+            <div>
+                <div class="flex justify-between items-center">
+                    <h1 class="text-white text-lg font-semibold border-b-2 border-crunchy">
+                        {{ title }}
+                    </h1>
+                </div>
+                <h2 class="text-gray-400 italic mt-1">
+                    "{{ summary }}"
+                </h2>
+                <div class="flex items-center space-x-2 mt-1">
+                    <h1 class="text-white text-sm">
+                        {{ time }}
+                    </h1>
+                    <div class="text-white font-semibold">
+                        -
+                    </div>
+                    <h1 class="text-white text-sm  italic">
+                        By
+                        <span class="text-crunchy font-semibold">
+                            {{ author }}
+                        </span>
+                    </h1>
+                </div>
+            </div>
+            <div class="w-full border-b-2 border-gray-700 mt-2 mb-4"></div>
+            <div class="flex justify-between">
+                <img class="rounded-lg h-48 w-48" src="{{ icon }}" alt="">
+                <div class="flex flex-col justify-between h-48 px-4" style="width: 480px">
+                    <div>
+                        <p class="text-white italic ">
+                            {{ brief }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

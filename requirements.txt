@@ -4,3 +4,5 @@ aiohttp
 requests
 jinja2
 selenium
+bs4
+lxml

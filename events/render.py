@@ -5,18 +5,17 @@ import asyncio
 
 from string import ascii_letters, punctuation
 from logging import getLogger
-from typing import Optional
+from typing import Optional, Union
 
 from jinja2 import Environment, FileSystemLoader
 from selenium.webdriver import Firefox, FirefoxOptions as Options
 
+from .news import NewsEntity
+from .releases import ReleaseEntity
+
 CHARACTERS = list(ascii_letters) + list(punctuation)
 TARGET_URL = f"file://{os.getcwd()}/serve/{{}}.html"
-
-if __name__ == '__main__':
-    CSS_PATH = "../../templates.css"
-else:
-    CSS_PATH = "../templates.css"
+CSS_PATH = "../templates.css"
 
 logger = getLogger("render-engine")
 
@@ -88,10 +87,10 @@ class RenderEngine:
         target.screenshot(out)
         logger.info(f"created image {out!r}")
 
-    async def render(self, type_: str, payload: dict):
+    async def render(self, type_: str, payload: Union[NewsEntity, ReleaseEntity]):
         logger.info(f"rendering html {type_!r}")
         template = self.env.get_template(f"{type_}.html")
-        out = template.render(**payload)
+        out = template.render(**payload.__dict__)
         logger.info(f"rendered html {type_!r}")
 
         if not os.path.exists(f"./serve"):
@@ -115,49 +114,3 @@ class RenderEngine:
             )
 
 
-async def _test():
-    from datetime import datetime
-    import logging
-
-    logging.basicConfig(level=logging.INFO)
-
-    renderer = RenderEngine(
-        "../templates",
-        driver_path="../bin/geckodriver.exe",
-    )
-
-    await renderer.start()
-
-    await renderer.render("news", dict(
-        title="FEATURE: Rimuru's Most Powerful Skill is Friendship",
-        summary="How Rimuru's ability to make friends has propelled them to success",
-        time=datetime.now().strftime('%B, %d %Y %I:%M%p GMT'),
-        author="Skyler Allen",
-        brief="Rimuru Tempest has spent their second life earning skill after"
-              " skill, but there's one that stands above all the others: their "
-              "ability to make friends with anyone. Hit the jump to see how "
-              "friendship is this slime's greatest ability!",
-        icon="https://img1.ak.crunchyroll.com/i/spire2/80272a581404f6dfde"
-             "2a1eba58ef98891616048369_thumb.png",
-        css=CSS_PATH,
-    ))
-
-    await renderer.render("release", dict(
-        title="Kyoto Sister School Exchange Event - Group Battle 2 - ",
-        epsiode=16,
-        description="The Kyoto Sister School Exchange Event's group battle begins."
-              "Kyoto's Todo rushes to attack the Tokyo students,"
-              "but Itadori takes on the role of stopping him and"
-              "faces off against him. Itadori's overwhelmed by"
-              "Todo's power, but suddenly Todo asks him what kind"
-              "of woman is his type--",
-        icon="https://img1.ak.crunchyroll.com/i/spire"
-             "3/02c909684baa37d6ef70a9df742d58951610752067_full.jpg",
-        css=CSS_PATH,
-    ))
-
-    renderer.shutdown()
-
-
-if __name__ == '__main__':
-    asyncio.run(_test())
